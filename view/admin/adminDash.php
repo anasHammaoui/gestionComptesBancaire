@@ -1,8 +1,12 @@
 <?php
     include_once "../../controller/adminController.php";
     $admin = new adminControllern();
+    // add account
     $admin -> ajouterCompte();
+    // get all users
     $usersData = $admin -> showAllUsers();
+    // edit users
+    $admin -> modifierCompte();
 ?>
 
 <!DOCTYPE html>
@@ -117,16 +121,16 @@
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                     <div>
-                        <div class="text-sm font-medium text-gray-900" data-id="<?= $value["user_id"]?>"><?= $value["client_name"] ?></div>
-                        <div class="text-sm text-gray-500"><?= $value["email"] ?></div>
+                        <div class="text-sm font-medium text-gray-900 name" data-id="<?= $value["user_id"]?>"><?= $value["client_name"] ?></div>
+                        <div class="text-sm text-gray-500 email"><?= $value["email"] ?></div>
                     </div>
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900"><?= $value["account_type"] ?></div>
+                <div class="text-sm text-gray-900 acctype"><?= $value["account_type"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900"><?= $value["balance"] ?></div>
+                <div class="text-sm text-gray-900 "><?= $value["balance"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
@@ -201,27 +205,23 @@
             <h3 class="text-xl font-bold mb-6">Edit Account</h3>
             <form id="editAccountForm" action="adminDash.php" method="POST" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Client Name</label>
-                    <input type="text" name="editName" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Client Name</label>
+                    <input type="text" name="editName" required class="mt-1 cname block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="editEmail" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Email</label>
+                    <input type="email" name="editEmail" required class="mt-1 cemail block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="editPassword" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Password</label>
+                    <input type="password" name="editPassword" required class="mt-1 cpass block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
-                    <select name="editAccType" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Account Type</label>
+                    <select name="editAccType" required class="mt-1 cacctype block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="epargne">Savings Account</option>
                         <option value="courant">Current Account</option>
                     </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Initial Balance ($)</label>
-                    <input name="editBalance" type="number" min="0" step="0.1" required class="mt-1 p-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <input type="text" name="userId" class="hidden input-id">
                 <div class="flex space-x-4 pt-4">

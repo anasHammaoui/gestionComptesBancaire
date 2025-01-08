@@ -47,5 +47,20 @@ class adminModel extends database {
         $getItAsArr = $getAll -> fetchAll(PDO::FETCH_ASSOC);
         return $getItAsArr;
     }
+    function editAcc($cName,$email,$pass,$accType,$userId){
+        try {
+            $this -> connection -> beginTransaction();
+            $changeUser = $this -> connection -> prepare("UPDATE users set client_name = ?, email = ?, client_password = ? where id = ?");
+            $changeUser -> execute([$cName,$email,$pass, $userId]);
+            $changeAcc = $this -> connection -> prepare("UPDATE accounts set account_type = ? where user_id = ?");
+            $changeAcc -> execute([$accType,$userId]);
+            $this -> connection -> commit();
+        } catch (Exception $e){
+            $this -> connection -> rollBack();
+            echo "failed  to edit " . $e;
+            return false;
+        }
+        return true;
+    }
 }
 ?>

@@ -18,6 +18,7 @@
                     echo "user is already exists";
                 } else {
                     $this -> userModel -> createAccount($name,$email,$pass,$accType,$balance);
+                    echo "alert('added successfully')";
                     header("location: adminDash.php");
                     exit();
                 }
@@ -27,6 +28,21 @@
            return $this -> userModel -> showAllUsers();
         }
         function modifierCompte(){
+           if (isset($_POST["editAcc"])){
+            $name = $this ->  validateInputs($_POST["editName"]);
+                $email = $this ->  validateInputs($_POST["editEmail"]);
+                $pass = password_hash( $this -> validateInputs($_POST["editPassword"]) , PASSWORD_DEFAULT);
+                $accType = $_POST["editAccType"];
+                $userId = $_POST["userId"];
+                if ($this -> userModel -> editAcc($name,$email,$pass,$accType,(int)$userId)){
+                    echo "<script>alert('edited succussfully')</script>";
+                header("location: adminDash.php");
+                exit();
+                } else {
+                    echo "<script>alert('failed succussfully')</script>";
+                }
+                
+           }
 
         }
         function activeInactiveCompte(){
