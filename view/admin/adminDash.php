@@ -7,6 +7,10 @@
     $usersData = $admin -> showAllUsers();
     // edit users
     $admin -> modifierCompte();
+    // :change status 
+    $admin -> activeInactiveCompte();
+    // total balance
+    $total = $admin -> showBalance();
 ?>
 
 <!DOCTYPE html>
@@ -85,9 +89,9 @@
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Balance</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€0.00</p>
+                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€<?=$total?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-blue-500">↑ 8%</span> from last month
+                    <span class="text-blue-500">All accounts</span>
                 </div>
             </div>
         </div>
@@ -137,17 +141,22 @@
                 <?= $value["acc_status"] ?>
                 </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button 
-                        class="text-blue-600 hover:text-blue-900 mr-4">
+            <td class="px-6 py-6 whitespace-nowrap text-sm flex font-medium">
+                
                     <?php
-                        if ($value["acc_status"] === "active"){
-                            echo "close";
-                        } else {
-                            echo "open";
-                        }
+                        if ($value["acc_status"] === "active"){ ?>
+                                <form action="adminDash.php" method="GET">
+                                    <input type="text" name="statusId" class="hidden" value="<?= $value["user_id"]?>">
+                                    <input type="submit" value="Close" name="closeAcc" class="text-blue-600 cursor-pointer hover:text-blue-900 mr-4">
+                                </form>
+                       <?php } else { ?>
+                                <form action="adminDash.php" method="GET">
+                                <input type="text" name="statusId" class="hidden" value="<?= $value["user_id"]?>">
+                                    <input type="submit" value="Open" name="openAcc" class="text-blue-600 cursor-pointer hover:text-blue-900 mr-4">
+                                </form>
+                       <?php     }
                     ?>
-                </button>
+               
                 <button 
                         onclick="editAccountModal()"
                         class="text-green-600 hover:text-green-900 edit-user">

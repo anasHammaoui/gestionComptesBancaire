@@ -62,5 +62,20 @@ class adminModel extends database {
         }
         return true;
     }
+    function closeAcc($userId){
+        $close = $this -> connection -> prepare("UPDATE accounts SET acc_status = 'inactive' where id = ?");
+        $close -> execute([$userId]);
+    }
+    function activeAcc($userId){
+        $close = $this -> connection -> prepare("UPDATE accounts SET acc_status = 'active' where id = ?");
+        $close -> execute([$userId]);
+    }
+    // show total ballance
+    function showTotalBalance(){
+        $total = $this -> connection -> prepare("SELECT SUM(balance) as total_bal from accounts");
+        $total -> execute();
+        $result = $total -> fetch(PDO::FETCH_ASSOC);
+        return $result["total_bal"];
+    }
 }
 ?>

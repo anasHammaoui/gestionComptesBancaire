@@ -39,14 +39,28 @@
                 header("location: adminDash.php");
                 exit();
                 } else {
-                    echo "<script>alert('failed succussfully')</script>";
+                    echo "<script>alert('Faild to edit')</script>";
                 }
-                
            }
 
         }
         function activeInactiveCompte(){
-
+            if (isset($_GET["closeAcc"])){
+                $userId = $this -> validateInputs($_GET["statusId"]);
+                $this -> userModel -> closeAcc((int)$userId);
+                echo "<script>alert('Status changed successfully')</script>";
+                header("location: adminDash.php");
+            }
+            if (isset($_GET["openAcc"])){
+                $userId = $this -> validateInputs($_GET["statusId"]);
+                $this -> userModel -> activeAcc((int)$userId);
+                echo "<script>alert('Status changed successfully')</script>";
+                header("location: adminDash.php");
+            }
+        }
+        // show balance
+        function showBalance(){
+            return   $this -> userModel -> showTotalBalance();
         }
     }
 ?>
