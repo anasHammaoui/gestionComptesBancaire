@@ -1,3 +1,9 @@
+<?php  
+ require_once "../../controller/clientController.php";
+ require_once "../../model/client.php";
+ $user=new Client();
+ $userSold=$user->showSold();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -60,7 +66,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Compte Courant</h3>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">€2,450.50</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2"><?=$userSold['balance']?></p>
                     <p class="text-sm text-gray-500 mt-1">N° FR76 1234 5678 9012</p>
                 </div>
                 

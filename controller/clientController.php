@@ -29,8 +29,8 @@ class ClientController
         }
         $user = $this->clientModel->loginData($email, $password);
         if ($user) {
-            // if (password_verify($password,$user["client_password"])) {
-                if ($password===$user["client_password"]) {
+            // {
+                if (password_verify($password,$user["client_password"]))  {
 
                 $_SESSION["user_Role"] = "user";
                 $_SESSION["userId"] = $user["id"];
@@ -38,16 +38,10 @@ class ClientController
                 if ($user["user_role"] === "user") {
                     header("location:../client/profeil.php");
 
-                    // $_SESSION["user_Role"] = "user";
-                    // $_SESSION["userId"] = $user["id"];
-                    // $_SESSION["userName"] = $user["name"];
+                 
                 } elseif ($user["user_role"] === "admin") {
-                    header("location:signup.php");
-                    // session_start();
-
-                    // $_SESSION["user_Role"] = "admin";
-                    // $_SESSION["userId"] = $user["id"];
-                    // $_SESSION["userName"] = $user["name"];
+                    header("location:adminDash");
+                    
                 }
             } else {
                 echo "password incorrect";
@@ -77,6 +71,26 @@ try {
 }
     return false;
 }
+public function Updatpass($password){
+    $newpassword=$_POST['newpassword'];
+    $confirmnewpassword=$_POST['confirmnewpassword'];
+    try {
+        $client = new Client();
+        if(empty($password) || empty($newpassword) || empty($confirmnewpassword)){
+            return "tous les champs sont necissaire";
+        }elseif($newpassword!==$confirmnewpassword){
+           return "la confirmation de mot de passe est incorrecte";
+        }
+       
+        $id= $_SESSION["userId"] ;
+         $client->Updatepassword($password,$id);
+         return "les modifications mese a jour avec succes";
+      
+    } catch (Exception $e) {
+        echo "Erreur : " . $e->getMessage();
+    }
+        return false;
+    }
       
     
     

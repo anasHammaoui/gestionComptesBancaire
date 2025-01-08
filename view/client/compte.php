@@ -1,9 +1,19 @@
+<?php  
+ require_once "../../controller/clientController.php";
+ require_once "../../model/client.php";
+ $user=new Client();
+ $userSold=$user->showSold();
+ $userSoldepa=$user->showSoldepa();
+
+//  var_dump($userSold);
+//  die();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Banque - Mes Comptes</title>
+    <title>Ma Banque - mon Comptes</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -21,7 +31,7 @@
                 </a>
                 <a href="mcompte.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="credit-card"></i>
-                    <span>Mes comptes</span>
+                    <span>Mon comptes</span>
                 </a>
                 <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
@@ -44,7 +54,8 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-8">
-            <h2 class="text-2xl font-bold text-gray-800">Mes Comptes</h2>
+            <h2 class="text-2xl font-bold text-gray-800">Mon Comptes</h2>
+            <?php if($userSold): ?>
 
             <!-- Compte Courant -->
             <div class="mt-6 bg-white rounded-lg shadow">
@@ -55,7 +66,7 @@
                             <p class="text-sm text-gray-500">N° FR76 1234 5678 9012</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-bold text-gray-900">€2,450.50</p>
+                            <p class="text-2xl font-bold text-gray-900"><?=$userSold['balance']?></p>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                 Actif
                             </span>
@@ -96,6 +107,9 @@
                     </div>
                 </div>
             </div>
+            <?php endif ?>
+
+<?php if($userSoldepa): ?>
 
             <!-- Compte Épargne -->
             <div class="mt-6 bg-white rounded-lg shadow">
@@ -106,7 +120,7 @@
                             <p class="text-sm text-gray-500">N° FR76 9876 5432 1098</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-bold text-gray-900">€15,750.20</p>
+                            <p class="text-2xl font-bold text-gray-900"><?=$userSoldepa['balance']?></p>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                 Actif
                             </span>
@@ -149,6 +163,7 @@
                     </div>
                 </div>
             </div>
+            <?php endif ?>
         </div>
     </div>
 
@@ -165,7 +180,7 @@
 
                 <!-- Modal body -->
                 <div class="p-6">
-                    <form id="alimenterForm" class="space-y-6">
+                    <form id="alimenterForm" class="space-y-6" method="post">
                         <!-- Sélection du compte -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Compte à alimenter *</label>
