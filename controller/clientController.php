@@ -9,8 +9,6 @@ class ClientController
     {
         $this->clientModel = new Client();
     }
-    
-
     //login
     function validate($data)
     {
@@ -30,18 +28,15 @@ class ClientController
         $user = $this->clientModel->loginData($email, $password);
         if ($user) {
             // {
-                if (password_verify($password,$user["client_password"]))  {
+            if (password_verify($password, $user["client_password"])) {
 
                 $_SESSION["user_Role"] = "user";
                 $_SESSION["userId"] = $user["id"];
                 $_SESSION["userName"] = $user["name"];
                 if ($user["user_role"] === "user") {
-                    header("location:../client/profeil.php");
-
-                 
+                    header("location:../client/index.php");
                 } elseif ($user["user_role"] === "admin") {
                     header("location:adminDash");
-                    
                 }
             } else {
                 echo "password incorrect";
@@ -56,43 +51,73 @@ class ClientController
             return $user;
         }
     }
-public function Updateinfo($name,$email){
-try {
-    $client = new Client();
-    if(empty($name) || empty($email)){
-        return "tous les champs sont necissaire";
-    }
-    $id= $_SESSION["userId"] ;
-     $client->Update($name,$email,$id);
-     return "les modifications mese a jour avec succes";
-  
-} catch (Exception $e) {
-    echo "Erreur : " . $e->getMessage();
-}
-    return false;
-}
-public function Updatpass($password){
-    $newpassword=$_POST['newpassword'];
-    $confirmnewpassword=$_POST['confirmnewpassword'];
-    try {
-        $client = new Client();
-        if(empty($password) || empty($newpassword) || empty($confirmnewpassword)){
-            return "tous les champs sont necissaire";
-        }elseif($newpassword!==$confirmnewpassword){
-           return "la confirmation de mot de passe est incorrecte";
+    public function Updateinfo($name, $email)
+    {
+        try {
+            $client = new Client();
+            if (empty($name) || empty($email)) {
+                return "tous les champs sont necissaire";
+            }
+            $id = $_SESSION["userId"];
+            $client->Update($name, $email, $id);
+            return "les modifications mese a jour avec succes";
+        } catch (Exception $e) {
+            echo "Erreur : " . $e->getMessage();
         }
-       
-        $id= $_SESSION["userId"] ;
-         $client->Updatepassword($password,$id);
-         return "les modifications mese a jour avec succes";
-      
-    } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
-    }
         return false;
     }
-      
-    
-    
-    }
+    public function Updatpass($password)
+    {
+        $newpassword = $_POST['newpassword'];
+        $confirmnewpassword = $_POST['confirmnewpassword'];
+        try {
+            $client = new Client();
+            if (empty($password) || empty($newpassword) || empty($confirmnewpassword)) {
+                return "tous les champs sont necissaire";
+            } elseif ($newpassword !== $confirmnewpassword) {
+                return "la confirmation de mot de passe est incorrecte";
+            }
 
+            $id = $_SESSION["userId"];
+            $client->Updatepassword($password, $id);
+            return "les modifications mese a jour avec succes";
+        } catch (Exception $e) {
+            echo "Erreur : " . $e->getMessage();
+        }
+        return false;
+    }
+public function clientAccount(){
+   $client = new Client();
+   return  $client->clientcompte($_SESSION["userId"]);
+}
+    public function retirer()
+    {
+        $amount = (float)$_POST['amount'];
+        $account_id = (int)$_POST['account_id'];
+        $transactionInfo = ["account_id" => $account_id, "amount" => $amount];
+
+        $client = new Client();
+        $client->retirerArgent($transactionInfo);
+        header("Location: index.php");
+    }
+    public function deposer(){
+        $amount = $_POST['amount'];
+        $account_id = $_POST['account_id'];
+        $transactionInfo = ["account_id" => $account_id, "amount" => $amount];
+
+        $client = new Client();
+        $client->deposerArgent($transactionInfo);
+        header("Location: index.php");
+    }
+   
+    public function transferer(){
+        $amount = (float)$_POST['amount'];
+        $account_id = (int)$_POST['account_id'];
+        // $beneficiary_account_id=(int)$_POST['beneficiary_account_id'];
+        $transactionInfo = ["account_id" => $account_id, "amount" => $amount];
+
+        $client = new Client();
+        $client->transfererArgent($transactionInfo);
+        header("Location: index.php");
+    }
+}
