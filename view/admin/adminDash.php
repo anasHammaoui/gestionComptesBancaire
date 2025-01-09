@@ -1,6 +1,8 @@
 <?php
     include_once "../../controller/adminController.php";
-    $admin = new adminControllern();
+    session_start();
+    // if (isset($_SESSION["user_Role"]) && $_SESSION["user_Role"] === "admin"){
+        $admin = new adminControllern();
     // add account
     $admin -> ajouterCompte();
     // get all users
@@ -10,7 +12,14 @@
     // :change status 
     $admin -> activeInactiveCompte();
     // total balance
-    $total = $admin -> showBalance();
+    $totalBal = $admin -> showBalance();
+    $totalWith = $admin -> showTotalWithd();
+    $totalDp = $admin -> showTotalDepot();
+    // } else {
+    //     echo "Please log in admin:)";
+    //     exit();
+    // }
+    
 ?>
 
 <!DOCTYPE html>
@@ -75,21 +84,21 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Deposits</h3>
-                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">€0.00</p>
+                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">€<?=$totalDp?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-green-500">↑ 12%</span> from last month
+                    <span class="text-green-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Withdrawals</h3>
-                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">€0.00</p>
+                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">€<?=$totalWith?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-red-500">↓ 5%</span> from last month
+                    <span class="text-red-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Balance</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€<?=$total?></p>
+                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€<?=$totalBal?></p>
                 <div class="mt-2 text-sm text-gray-600">
                     <span class="text-blue-500">All accounts</span>
                 </div>
@@ -131,31 +140,36 @@
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900 acctype"><?= $value["account_type"] ?></div>
+                <div class="text-sm text-gray-900 acctype"><?= $value["acc_type"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="text-sm text-gray-900 "><?= $value["balance"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                <?= $value["acc_status"] ?>
-                </span>
+                <form method="GET" action="adminDash.php">
+                    <select 
+                        name="changeStatus"  
+                        class="border p-2 border-blue-500 rounded"
+                        onchange="this.form.submit()"
+                    >
+                    <option value="Account Status">Account Status</option>
+                        <?php
+                        $account = $admin->showAccDrop($value["user_id"]);
+                        for ($i = 0; $i < count($account); $i++) { ?>
+                            <option 
+                                class="p-2" 
+                                value="<?=$account[$i]["acc_status"] . '|' .$account[$i]["id"] ?>"
+                            >
+                            <?=$account[$i]["account_type"] .': ' . $account[$i]["acc_status"]?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </form>
+
             </td>
             <td class="px-6 py-6 whitespace-nowrap text-sm flex font-medium">
                 
-                    <?php
-                        if ($value["acc_status"] === "active"){ ?>
-                                <form action="adminDash.php" method="GET">
-                                    <input type="text" name="statusId" class="hidden" value="<?= $value["user_id"]?>">
-                                    <input type="submit" value="Close" name="closeAcc" class="text-blue-600 cursor-pointer hover:text-blue-900 mr-4">
-                                </form>
-                       <?php } else { ?>
-                                <form action="adminDash.php" method="GET">
-                                <input type="text" name="statusId" class="hidden" value="<?= $value["user_id"]?>">
-                                    <input type="submit" value="Open" name="openAcc" class="text-blue-600 cursor-pointer hover:text-blue-900 mr-4">
-                                </form>
-                       <?php     }
-                    ?>
+                   
                
                 <button 
                         onclick="editAccountModal()"
@@ -226,7 +240,14 @@
                     <input type="password" name="editPassword" required class="mt-1 cpass block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 ">Account Type</label>
+                    <label class="block text-sm font-medium text-gray-700 ">Choose Account To change</label>
+                    <select name="AccToCh" required class="mt-1 cacctype block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="epargne">Savings Account</option>
+                        <option value="courant">Current Account</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 ">New Type</label>
                     <select name="editAccType" required class="mt-1 cacctype block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="epargne">Savings Account</option>
                         <option value="courant">Current Account</option>
@@ -235,6 +256,7 @@
                 <input type="text" name="userId" class="hidden input-id">
                 <div class="flex space-x-4 pt-4">
                     <button type="submit" name="editAcc" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Edit</button>
+                    <button type="submit" name="Acc" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Edit</button>
                     <button type="button" onclick="closeEditAccountModal()" class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300">Cancel</button>
                 </div>
             </form>

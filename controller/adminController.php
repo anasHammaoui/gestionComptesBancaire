@@ -14,14 +14,11 @@
                 $pass = password_hash( $this -> validateInputs($_POST["password"]) , PASSWORD_DEFAULT);
                 $accType = $_POST["accType"];
                 $balance = $_POST["balance"];
-                if ($this -> userModel -> isExists($email)){
-                    echo "user is already exists";
-                } else {
                     $this -> userModel -> createAccount($name,$email,$pass,$accType,$balance);
                     echo "alert('added successfully')";
                     header("location: adminDash.php");
                     exit();
-                }
+              
             }
         }
         function showAllUsers(){
@@ -45,22 +42,32 @@
 
         }
         function activeInactiveCompte(){
-            if (isset($_GET["closeAcc"])){
-                $userId = $this -> validateInputs($_GET["statusId"]);
-                $this -> userModel -> closeAcc((int)$userId);
-                echo "<script>alert('Status changed successfully')</script>";
-                header("location: adminDash.php");
-            }
-            if (isset($_GET["openAcc"])){
-                $userId = $this -> validateInputs($_GET["statusId"]);
-                $this -> userModel -> activeAcc((int)$userId);
-                echo "<script>alert('Status changed successfully')</script>";
-                header("location: adminDash.php");
+            if (isset($_GET["changeStatus"])){
+                list($status, $userId) = explode("|",$_GET["changeStatus"]);
+                    if ($status === "active"){
+                        $this -> userModel -> closeAcc((int)$userId);
+                        header("location: adminDash.php");
+                    } else {
+                        $this -> userModel -> activeAcc((int)$userId);
+                        header("location: adminDash.php");
+                    }
             }
         }
         // show balance
         function showBalance(){
             return   $this -> userModel -> showTotalBalance();
+        }
+        // show withdraw
+        function showTotalWithd(){
+            return   $this -> userModel -> showTotalWithd();
+        }
+        // show deposits
+        function showTotalDepot(){
+            return   $this -> userModel -> showTotalDepot();
+        }
+        // show accounts inn dropdown
+        function showAccDrop($id){
+           return $this -> userModel -> showAccs($id);
         }
     }
 ?>
