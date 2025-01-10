@@ -59,13 +59,13 @@ GROUP BY users.id");
         $getItAsArr = $getAll -> fetchAll(PDO::FETCH_ASSOC);
         return $getItAsArr;
     }
-    function editAcc($cName,$email,$pass,$accType,$userId){
+    function editAcc($cName,$email,$pass,$userId){
         try {
             $this -> connection -> beginTransaction();
             $changeUser = $this -> connection -> prepare("UPDATE users set client_name = ?, email = ?, client_password = ? where id = ?");
             $changeUser -> execute([$cName,$email,$pass, $userId]);
-            $changeAcc = $this -> connection -> prepare("UPDATE accounts set account_type = ? where user_id = ?");
-            $changeAcc -> execute([$accType,$userId]);
+            // $changeAcc = $this -> connection -> prepare("UPDATE accounts set account_type = ? where user_id = ?");
+            // $changeAcc -> execute([$accType,$userId]);
             $this -> connection -> commit();
         } catch (Exception $e){
             $this -> connection -> rollBack();
@@ -120,6 +120,29 @@ GROUP BY users.id");
         } else {
             return 0;
         }
+    }
+    // register for admins
+//     public function register($user) {
+   
+//         try {
+//             // Prepare and execute the insertion query
+//             $result = $this->conn->prepare("INSERT INTO users (client_name, email, client_password, role) VALUES (?, ?, ?, ?)");
+//             $result->execute($user);
+//             return $this->conn->lastInsertId();
+            
+           
+//         } catch (PDOException $e) {
+//             echo "Error: " . $e->getMessage();
+//         }
+//     }
+    // remove accounts  
+    function removeAccs($id){
+        $removeAcc = $this -> connection -> prepare("DELETE FROM accounts WHERE user_id = ?");
+        $removeAcc -> execute([$id]);
+        $removeUser = $this -> connection -> prepare("DELETE FROM users WHERE id = ?");
+        $removeUser -> execute([$id]);
+        
+        return true;
     }
 }
 ?>

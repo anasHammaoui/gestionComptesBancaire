@@ -15,6 +15,8 @@
     $totalBal = $admin -> showBalance();
     $totalWith = $admin -> showTotalWithd();
     $totalDp = $admin -> showTotalDepot();
+    // delete accs
+    $admin -> removeUsersAccs();
     // } else {
     //     echo "Please log in admin:)";
     //     exit();
@@ -167,7 +169,7 @@
                 </form>
 
             </td>
-            <td class="px-6 py-6 whitespace-nowrap text-sm flex font-medium">
+            <td class="px-6 py-6 whitespace-nowrap text-sm gap-3 flex font-medium">
                 
                    
                
@@ -176,6 +178,10 @@
                         class="text-green-600 hover:text-green-900 edit-user">
                     Edit
                 </button>
+                <form action="adminDash.php" method="get">
+                    <input type="text" name="deleteUserId" value="<?= $value["user_id"]?>" class="hidden">
+                    <input type="submit" value="Remove" name="deleteAcc" class="text-rose-600 hover:text-rose-900 cursor-pointer">
+                </form>
             </td>
         </tr>
                           <?php  }
@@ -239,24 +245,9 @@
                     <label class="block text-sm font-medium text-gray-700 ">Password</label>
                     <input type="password" name="editPassword" required class="mt-1 cpass block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 ">Choose Account To change</label>
-                    <select name="AccToCh" required class="mt-1 cacctype block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="epargne">Savings Account</option>
-                        <option value="courant">Current Account</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 ">New Type</label>
-                    <select name="editAccType" required class="mt-1 cacctype block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="epargne">Savings Account</option>
-                        <option value="courant">Current Account</option>
-                    </select>
-                </div>
                 <input type="text" name="userId" class="hidden input-id">
                 <div class="flex space-x-4 pt-4">
                     <button type="submit" name="editAcc" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Edit</button>
-                    <button type="submit" name="Acc" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Edit</button>
                     <button type="button" onclick="closeEditAccountModal()" class="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300">Cancel</button>
                 </div>
             </form>
