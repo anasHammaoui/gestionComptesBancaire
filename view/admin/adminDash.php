@@ -1,8 +1,38 @@
 <?php
     include_once "../../controller/adminController.php";
-    $admin = new adminControllern();
+    session_start();
+    
+    if (isset($_SESSION["admin"]) && $_SESSION["admin"] = "admin"){
+        // session variables
+        $adminSession =  $_SESSION["admin"];
+        $adminName =  $_SESSION["admin_name"];
+        $adminId =  $_SESSION["admin_id"] ;
+        var_dump($adminSession);
+
+        $admin = new adminControllern();
+    // add account
     $admin -> ajouterCompte();
+    // get all users
     $usersData = $admin -> showAllUsers();
+    // edit users
+    $admin -> modifierCompte();
+    // :change status 
+    $admin -> activeInactiveCompte();
+    // total balance
+    $totalBal = $admin -> showBalance();
+    $totalWith = $admin -> showTotalWithd();
+    $totalDp = $admin -> showTotalDepot();
+    // delete accs
+    $admin -> removeUsersAccs();
+    if (isset($_GET["logout"])){
+        session_destroy();
+        header("location: ../auth/loginAdmin.php");
+    }
+    } else {
+        echo "Please log in admin:)";
+        exit();
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +60,7 @@
                     <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                          alt="Admin" class="w-10 h-10 rounded-full">
                     <div>
-                        <p class="text-white font-medium">Admin User</p>
+                        <p class="text-white font-medium"><?= $adminName ?></p>
                     </div>
                 </div>
             </div>
@@ -38,12 +68,13 @@
                 <a href="#dashboard" class="flex items-center px-6 py-3 text-white bg-blue-900">
                     <span>Dashboard</span>
                 </a>
-                <a href="#accounts" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
-                    <span>Accounts</span>
-                </a>
-                <a href="#reports" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
-                    <span>Reports</span>
-                </a>
+                <!-- <a href="../auth/logout.php" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
+                    <span>Logout</span>
+                </a> -->
+                <form action="adminDash.php" method="GET">
+                    <input type="submit" name="logout" value="logout" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900 w-full text-left cursor-pointer">
+                </form>
+              
             </div>
         </nav>
     </div>
@@ -67,23 +98,23 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Deposits</h3>
-                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">€0.00</p>
+                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">€<?=$totalDp?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-green-500">↑ 12%</span> from last month
+                    <span class="text-green-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Withdrawals</h3>
-                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">€0.00</p>
+                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">€<?=$totalWith?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-red-500">↓ 5%</span> from last month
+                    <span class="text-red-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Balance</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€0.00</p>
+                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€<?=$totalBal?></p>
                 <div class="mt-2 text-sm text-gray-600">
-                    <span class="text-blue-500">↑ 8%</span> from last month
+                    <span class="text-blue-500">All accounts</span>
                 </div>
             </div>
         </div>
@@ -117,38 +148,52 @@
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                     <div>
-                        <div class="text-sm font-medium text-gray-900" data-id="<?= $value["user_id"]?>"><?= $value["client_name"] ?></div>
-                        <div class="text-sm text-gray-500"><?= $value["email"] ?></div>
+                        <div class="text-sm font-medium text-gray-900 name" data-id="<?= $value["user_id"]?>"><?= $value["client_name"] ?></div>
+                        <div class="text-sm text-gray-500 email"><?= $value["email"] ?></div>
                     </div>
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900"><?= $value["account_type"] ?></div>
+                <div class="text-sm text-gray-900 acctype"><?= $value["acc_type"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900"><?= $value["balance"] ?></div>
+                <div class="text-sm text-gray-900 "><?= $value["balance"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
-                <?= $value["acc_status"] ?>
-                </span>
+                <form method="GET" action="adminDash.php">
+                    <select 
+                        name="changeStatus"  
+                        class="border p-2 border-blue-500 rounded"
+                        onchange="this.form.submit()"
+                    >
+                    <option value="Account Status">Account Status</option>
+                        <?php
+                        $account = $admin->showAccDrop($value["user_id"]);
+                        for ($i = 0; $i < count($account); $i++) { ?>
+                            <option 
+                                class="p-2" 
+                                value="<?=$account[$i]["acc_status"] . '|' .$account[$i]["id"] ?>"
+                            >
+                            <?=$account[$i]["account_type"] .': ' . $account[$i]["acc_status"]?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </form>
+
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button 
-                        class="text-blue-600 hover:text-blue-900 mr-4">
-                    <?php
-                        if ($value["acc_status"] === "active"){
-                            echo "close";
-                        } else {
-                            echo "open";
-                        }
-                    ?>
-                </button>
+            <td class="px-6 py-6 whitespace-nowrap text-sm gap-3 flex font-medium">
+                
+                   
+               
                 <button 
                         onclick="editAccountModal()"
                         class="text-green-600 hover:text-green-900 edit-user">
                     Edit
                 </button>
+                <form action="adminDash.php" method="get">
+                    <input type="text" name="deleteUserId" value="<?= $value["user_id"]?>" class="hidden">
+                    <input type="submit" value="Remove" name="deleteAcc" class="text-rose-600 hover:text-rose-900 cursor-pointer">
+                </form>
             </td>
         </tr>
                           <?php  }
@@ -201,27 +246,16 @@
             <h3 class="text-xl font-bold mb-6">Edit Account</h3>
             <form id="editAccountForm" action="adminDash.php" method="POST" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Client Name</label>
-                    <input type="text" name="editName" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Client Name</label>
+                    <input type="text" name="editName" required class="mt-1 cname block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="editEmail" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Email</label>
+                    <input type="email" name="editEmail" required class="mt-1 cemail block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="editPassword" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Account Type</label>
-                    <select name="editAccType" required class="mt-1 block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="epargne">Savings Account</option>
-                        <option value="courant">Current Account</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Initial Balance ($)</label>
-                    <input name="editBalance" type="number" min="0" step="0.1" required class="mt-1 p-1 border block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block text-sm font-medium text-gray-700 ">Password</label>
+                    <input type="password" name="editPassword" required class="mt-1 cpass block w-full border p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <input type="text" name="userId" class="hidden input-id">
                 <div class="flex space-x-4 pt-4">

@@ -26,10 +26,18 @@ function closeEditAccountModal() {
 // edit user infos
 
 let allUsers = document.querySelectorAll(".edit-user");
-allUsers.forEach(user =>{
+let allTr = document.querySelectorAll(".users");
+allUsers.forEach((user,i) =>{
     user.addEventListener("click",()=>{
+        let name = allTr[i].querySelector(".name").textContent;
+        let email = allTr[i].querySelector(".email").textContent;
+        let acctype = allTr[i].querySelector(".acctype").textContent;
+        console.log(name, email, acctype);
         let userId = user.parentNode.parentNode.querySelector("div[data-id]").getAttribute("data-id");
         document.querySelector(".input-id").value =userId;
+        document.querySelector(".cname").value =name;
+        document.querySelector(".cemail").value =email;
+        document.querySelector(".cacctype").value =acctype;
     })
 })
 
