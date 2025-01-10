@@ -1,3 +1,13 @@
+<?php  
+ require_once "../../controller/clientController.php";
+ require_once "../../model/client.php";
+ $user=new Client();
+ $userSold=$user->showSold();
+ $userSoldepa=$user->showSoldepa();
+//  $user1=new ClientController();
+//  $soldfinal=$user1->showfinalsold($client,$transactionInfo,$amount,$clientSold);
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,23 +25,23 @@
                 <h1 class="text-2xl font-bold text-blue-600">Ma Banque</h1>
             </div>
             <nav class="mt-6">
-                <a href="index.html" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
+                <a href="index.php" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
                     <i data-lucide="wallet"></i>
                     <span>Tableau de bord</span>
                 </a>
-                <a href="compte.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="compte.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="credit-card"></i>
                     <span>Mes comptes</span>
                 </a>
-                <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <!-- <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
                     <span>Virements</span>
-                </a>
-                <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                </a> -->
+                <!-- <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="users"></i>
                     <span>Bénéficiaires</span>
-                </a>
-                <a href="historique.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                </a> -->
+                <a href="historique.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="history"></i>
                     <span>Historique</span>
                 </a>
@@ -58,37 +68,53 @@
             
             <!-- Account Summary Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+            <?php if($userSold): ?>
+
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Compte Courant</h3>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">€2,450.50</p>
-                    <p class="text-sm text-gray-500 mt-1">N° FR76 1234 5678 9012</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2"><?=$userSold['balance']?></p>
+                    <p class="text-sm text-gray-500 mt-1"><?=$userSold['id']?></p>
                 </div>
-                
+                <?php endif ?>
+
+                <?php if($userSoldepa): ?>
+
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Compte Épargne</h3>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">€15,750.20</p>
-                    <p class="text-sm text-gray-500 mt-1">N° FR76 9876 5432 1098</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2"><?=$userSoldepa['balance']?></p>
+                    <p class="text-sm text-gray-500 mt-1"><?=$userSoldepa['id']?></p>
                 </div>
+                <?php endif ?>
             </div>
 
             <!-- Quick Actions -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                <button class="flex items-center justify-center space-x-2 p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                <button  class="flex items-center justify-center space-x-2 p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <a href="formullaireretirer.php" class="flex items-center w-full p-4 space-x-3  border-r-4 border-blue-600">
                     <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>Nouveau virement</span>
+                    <span>retirer</span>
+                    </a>
                 </button>
+                
                 <button class="flex items-center justify-center space-x-2 p-4 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span>Alimenter compte</span>
+                <a href="formullairedeposer.php" class="flex items-center w-full p-4 space-x-3  border-r-4 border-green-700">
+
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>depose</span>
+                    </a>
+
                 </button>
-                <button class="flex items-center justify-center space-x-2 p-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
-                    <i data-lucide="users" class="w-5 h-5"></i>
-                    <span>Gérer bénéficiaires</span>
-                </button>
+                <button  class="flex items-center justify-center space-x-2 p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <a href="formullairetransfer.php" class="flex items-center w-full p-4 space-x-3  border-r-4 border-blue-600">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>transferer</span>
+                    </a>
+                </button>    
+              
             </div>
 
             <!-- Recent Transactions -->
-            <div class="bg-white rounded-lg shadow mt-6">
+            <!-- <div class="bg-white rounded-lg shadow mt-6">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-700">Transactions récentes</h3>
                     <div class="mt-4 space-y-4">
@@ -115,7 +141,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 <!-- Toggle Button for Mobile -->

@@ -8,6 +8,11 @@ if(isset($_POST['updatesubmit'])){
     $client=new ClientController();
     $result=$client->Updateinfo($name,$email);
 }
+if(isset($_POST['updatepasssubmit'])){
+    $password=$_POST['client_password'];
+    $client=new ClientController();
+    $result1=$client->Updatpass($password);
+}
 
 
 // session_start();
@@ -31,27 +36,27 @@ $userInfo=$user->showClient();
                 <h1 class="text-2xl font-bold text-blue-600">Ma Banque</h1>
             </div>
             <nav class="mt-6">
-                <a href="index.html" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
+                <a href="index.php" class="flex items-center w-full p-4 space-x-3 bg-blue-50 text-blue-600 border-r-4 border-blue-600">
                     <i data-lucide="wallet"></i>
                     <span>Tableau de bord</span>
                 </a>
-                <a href="compte.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="compte.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="credit-card"></i>
                     <span>Mes comptes</span>
                 </a>
-                <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <!-- <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
                     <span>Virements</span>
-                </a>
-                <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                </a> -->
+                <!-- <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="users"></i>
                     <span>Bénéficiaires</span>
-                </a>
-                <a href="historique.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                </a> -->
+                <a href="historique.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="history"></i>
                     <span>Historique</span>
                 </a>
-                <a href="profeil.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="profeil.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="user"></i>
                     <span>Profil</span>
                 </a>
@@ -219,22 +224,32 @@ $userInfo=$user->showClient();
                     </div>
 
                     <!-- Sécurité -->
+
+                    
                     <div class="bg-white rounded-lg shadow mt-6">
+                    
                         <div class="p-6">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4">Sécurité</h3>
-                            <form class="space-y-6">
+                            <?php if(isset($result1)):?>
+                                    <div >
+                                        <p><?= $result1?></p>
+                                    </div>
+                                    <?php endif?>
+                            <form class="space-y-6" method="post">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Mot de passe actuel</label>
+                                    <label class="block text-sm font-medium text-gray-700"></label>
                                     <input 
+                                    name="client_password"
                                         type="password" 
                                         class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
                                         placeholder="••••••••"
                                     />
                                 </div>
-
+                               
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
                                     <input 
+                                    name="newpassword"
                                         type="password" 
                                         class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
                                         placeholder="••••••••"
@@ -244,6 +259,7 @@ $userInfo=$user->showClient();
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Confirmer le nouveau mot de passe</label>
                                     <input 
+                                    name="confirmnewpassword"
                                         type="password" 
                                         class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
                                         placeholder="••••••••"
@@ -251,7 +267,7 @@ $userInfo=$user->showClient();
                                 </div>
 
                                 <div class="flex justify-end pt-4">
-                                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                    <button name="updatepasssubmit" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                                         Modifier le mot de passe
                                     </button>
                                 </div>
