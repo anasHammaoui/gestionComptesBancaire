@@ -129,5 +129,13 @@ GROUP BY users.id");
         $removeUser -> execute([$id]);
         return true;
     }
+    // search by ajax 
+    function liveSearch($search){
+        $getSearch = $this -> connection -> prepare("SELECT users.id, client_name, email, GROUP_CONCAT(accounts.account_type SEPARATOR ', ') 
+as acc_type, SUM(accounts.balance) as balance FROM users JOIN accounts ON users.id = accounts.user_id  where users.client_name like ? GROUP BY users.id;");
+$getSearch -> execute(["%$search%"]);
+$result = $getSearch -> fetchAll(PDO::FETCH_ASSOC);
+return $result;
+    }
 }
 ?>

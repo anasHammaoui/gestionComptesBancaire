@@ -77,6 +77,13 @@
             }
         }
     }
+    // search by ajax
+    function search(){
+        if (isset($_GET["search"])){
+            $search = $_GET["search"];
+            echo json_encode($this -> userModel -> liveSearch($search)) ;
+        }
+    }
     
     }
 ?>

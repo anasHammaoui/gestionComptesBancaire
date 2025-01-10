@@ -8,9 +8,6 @@
         $adminName =  $_SESSION["admin_name"];
         $adminId =  $_SESSION["admin_id"] ;
         $adminImg =  $_SESSION["admin_img"] ;
-        var_dump($adminImg);
-        var_dump($adminSession);
-
         $admin = new adminControllern();
     // add account
     $admin -> ajouterCompte();
@@ -26,6 +23,7 @@
     $totalDp = $admin -> showTotalDepot();
     // delete accs
     $admin -> removeUsersAccs();
+
     if (isset($_GET["logout"])){
         session_destroy();
         header("location: ../auth/loginAdmin.php");
@@ -129,7 +127,7 @@
                     <div class="relative w-64">
                         <input type="text" id="searchInput" 
                                placeholder="Search clients..." 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                               class="class searchInput w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -139,11 +137,11 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Type</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="status px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="accountsTable" class="bg-white divide-y divide-gray-200">
+                        <tbody id="accountsTable" class="tableData bg-white divide-y divide-gray-200">
                         <?php
                             foreach ($usersData as $value){ ?>
                                <tr class="users">
@@ -169,16 +167,7 @@
                         onchange="this.form.submit()"
                     >
                     <option value="Account Status">Account Status</option>
-                        <?php
-                        $account = $admin->showAccDrop($value["user_id"]);
-                        for ($i = 0; $i < count($account); $i++) { ?>
-                            <option 
-                                class="p-2" 
-                                value="<?=$account[$i]["acc_status"] . '|' .$account[$i]["id"] ?>"
-                            >
-                            <?=$account[$i]["account_type"] .': ' . $account[$i]["acc_status"]?>
-                            </option>
-                        <?php } ?>
+                        
                     </select>
                 </form>
 
@@ -192,7 +181,7 @@
                         class="text-green-600 hover:text-green-900 edit-user">
                     Edit
                 </button>
-                <form action="adminDash.php" method="get">
+                <form action="adminDash.php" method="get" class="mb-0">
                     <input type="text" name="deleteUserId" value="<?= $value["user_id"]?>" class="hidden">
                     <input type="submit" value="Remove" name="deleteAcc" class="text-rose-600 hover:text-rose-900 cursor-pointer">
                 </form>
