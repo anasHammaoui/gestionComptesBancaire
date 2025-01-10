@@ -22,6 +22,7 @@ CREATE TABLE accounts(
 ALTER TABLE accounts
 ADD COLUMN acc_status ENUM('active', 'inactive') DEFAULT 'active';
 SELECT * FROM accounts;
+SELECT * FROM transactions;
 create table transactions(
 id INT AUTO_INCREMENT PRIMARY KEY,
 account_id INT NOT NULL,
@@ -34,3 +35,11 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 ALTER TABLE users
 MODIFY COLUMN profile_pic VARCHAR(255) DEFAULT NULL;
+CREATE TABLE admins(
+admin_id INT AUTO_INCREMENT PRIMARY KEY,
+	admin_name VARCHAR(255),
+	email VARCHAR(100),
+	admin_password VARCHAR(255),
+	profile_pic VARCHAR(255)
+);
+SELECT * FROM admins;

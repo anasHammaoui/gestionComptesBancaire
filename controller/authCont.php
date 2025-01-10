@@ -48,6 +48,7 @@ public function handleLogin(){
                     $_SESSION["admin"] = "admin";
                     $_SESSION["admin_name"] = $result["admin_name"];
                     $_SESSION["admin_id"] = $result["admin_id"];
+                    $_SESSION["admin_img"] = $result["profile_pic"];
                     header("location: ../admin/adminDash.php");
                 } else {
                     echo "password incorrect";
