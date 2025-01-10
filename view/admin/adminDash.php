@@ -1,7 +1,14 @@
 <?php
     include_once "../../controller/adminController.php";
     session_start();
-    // if (isset($_SESSION["user_Role"]) && $_SESSION["user_Role"] === "admin"){
+    
+    if (isset($_SESSION["admin"]) && $_SESSION["admin"] = "admin"){
+        // session variables
+        $adminSession =  $_SESSION["admin"];
+        $adminName =  $_SESSION["admin_name"];
+        $adminId =  $_SESSION["admin_id"] ;
+        var_dump($adminSession);
+
         $admin = new adminControllern();
     // add account
     $admin -> ajouterCompte();
@@ -17,10 +24,14 @@
     $totalDp = $admin -> showTotalDepot();
     // delete accs
     $admin -> removeUsersAccs();
-    // } else {
-    //     echo "Please log in admin:)";
-    //     exit();
-    // }
+    if (isset($_GET["logout"])){
+        session_destroy();
+        header("location: ../auth/loginAdmin.php");
+    }
+    } else {
+        echo "Please log in admin:)";
+        exit();
+    }
     
 ?>
 
@@ -49,7 +60,7 @@
                     <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                          alt="Admin" class="w-10 h-10 rounded-full">
                     <div>
-                        <p class="text-white font-medium">Admin User</p>
+                        <p class="text-white font-medium"><?= $adminName ?></p>
                     </div>
                 </div>
             </div>
@@ -57,12 +68,13 @@
                 <a href="#dashboard" class="flex items-center px-6 py-3 text-white bg-blue-900">
                     <span>Dashboard</span>
                 </a>
-                <a href="#accounts" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
-                    <span>Accounts</span>
-                </a>
-                <a href="#reports" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
-                    <span>Reports</span>
-                </a>
+                <!-- <a href="../auth/logout.php" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900">
+                    <span>Logout</span>
+                </a> -->
+                <form action="adminDash.php" method="GET">
+                    <input type="submit" name="logout" value="logout" class="flex items-center px-6 py-3 text-blue-100 hover:bg-blue-900 w-full text-left cursor-pointer">
+                </form>
+              
             </div>
         </nav>
     </div>

@@ -65,45 +65,7 @@
         function showAccDrop($id){
            return $this -> userModel -> showAccs($id);
         }
-        // sign up for admin
-        // public function handleRegister(){
-
-      
-        //     if ($_SERVER["REQUEST_METHOD"] == "POST"){
-        //        if (isset($_POST['signup'])) {
-        //           echo "<pre>";
-        //        //   var_dump($_POST);die();
-      
-        //            $full_name = $_POST['full_name'];
-        //            $email = $_POST['email'];
-        //            $role = $_POST['role'];
-        //            $password = $_POST['password'];
-        //            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-      
-        //            $user = [$full_name,$hashed_password,$email,$role];
-      
-                   
-      
-        //            $lastInsertId = $this->UserModel->register($user);
-      
-                   
-                  
-        //                $_SESSION['user_loged_in_id'] = $lastInsertId ;
-        //                $_SESSION['user_loged_in_role'] = $role;
-       
-        //                if ($lastInsertId && $role == 1) {
-        //                    header('Location: /admin');
-        //                } else if ($lastInsertId && $role == 2) {
-        //                    header('Location: /client');
-        //                } else if ($lastInsertId && $role == 3) {
-        //                    header('Location: freelancer/dashboard');
-        //                }                    
-                       
-        //                exit;
-                   
-        //        }
-        //    }
-        //  }
+        
           // delete users clients
     function removeUsersAccs(){
         if (isset($_GET["deleteAcc"])){

@@ -121,27 +121,12 @@ GROUP BY users.id");
             return 0;
         }
     }
-    // register for admins
-//     public function register($user) {
-   
-//         try {
-//             // Prepare and execute the insertion query
-//             $result = $this->conn->prepare("INSERT INTO users (client_name, email, client_password, role) VALUES (?, ?, ?, ?)");
-//             $result->execute($user);
-//             return $this->conn->lastInsertId();
-            
-           
-//         } catch (PDOException $e) {
-//             echo "Error: " . $e->getMessage();
-//         }
-//     }
     // remove accounts  
     function removeAccs($id){
         $removeAcc = $this -> connection -> prepare("DELETE FROM accounts WHERE user_id = ?");
         $removeAcc -> execute([$id]);
         $removeUser = $this -> connection -> prepare("DELETE FROM users WHERE id = ?");
         $removeUser -> execute([$id]);
-        
         return true;
     }
 }
