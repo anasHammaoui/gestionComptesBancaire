@@ -1,12 +1,14 @@
 <?php
     include_once "../../controller/adminController.php";
     session_start();
-    
+    $adminImg = "";
     if (isset($_SESSION["admin"]) && $_SESSION["admin"] = "admin"){
         // session variables
         $adminSession =  $_SESSION["admin"];
         $adminName =  $_SESSION["admin_name"];
         $adminId =  $_SESSION["admin_id"] ;
+        $adminImg =  $_SESSION["admin_img"] ;
+        var_dump($adminImg);
         var_dump($adminSession);
 
         $admin = new adminControllern();
@@ -57,7 +59,7 @@
         <nav class="mt-6">
             <div class="px-4 py-3">
                 <div class="flex items-center space-x-3">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                    <img src="../adminImg/<?=$adminImg?>" 
                          alt="Admin" class="w-10 h-10 rounded-full">
                     <div>
                         <p class="text-white font-medium"><?= $adminName ?></p>
