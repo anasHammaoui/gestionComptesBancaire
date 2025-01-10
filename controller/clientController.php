@@ -111,13 +111,31 @@ public function clientAccount(){
     }
    
     public function transferer(){
+
         $amount = (float)$_POST['amount'];
-        $account_id = (int)$_POST['account_id'];
+        $account_id_source = (int)$_POST['account_id_source'];
+        $account_id_cible = (int)$_POST['account_id_cible'];
         // $beneficiary_account_id=(int)$_POST['beneficiary_account_id'];
-        $transactionInfo = ["account_id" => $account_id, "amount" => $amount];
+        $transactionInfo = ["account_id_source" => $account_id_source,"account_id_cible"=>$account_id_cible, "amount" => $amount];
 
         $client = new Client();
         $client->transfererArgent($transactionInfo);
         header("Location: index.php");
+    }
+    public function historique(){
+      $historiquetransactions=  $this->clientModel->history();
+      $depots=0;
+      $retraits=0;
+      foreach($historiquetransactions as $historiquetransaction){
+            //   echo "<pre>";
+            //     var_dump($historiquetransaction);
+        if($historiquetransaction["transaction_type"] === 'depot'){
+            $depots +=(float)$historiquetransaction["amount"] ;
+        }elseif($historiquetransaction["transaction_type"] === 'retrait'){
+            $retraits +=(float)$historiquetransaction["amount"] ;
+        }
+    }
+    return  ["historiquetransactions"=>$historiquetransactions,"depot"=>$depots,"retrait"=>$retraits];
+
     }
 }

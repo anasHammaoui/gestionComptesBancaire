@@ -44,7 +44,7 @@ class Client extends Database
     public function showSold()
     {
         $userId = $_SESSION["userId"];
-        $stmt = $this->connection->prepare("SELECT balance , id FROM accounts WHERE user_id = ? && account_type='courant'");
+        $stmt = $this->connection->prepare("SELECT balance ,acc_status, id FROM accounts WHERE user_id = ? && account_type='courant'");
         $stmt->execute([$userId]);
         $clientSold = $stmt->fetch(PDO::FETCH_ASSOC);
         return $clientSold;
@@ -52,7 +52,7 @@ class Client extends Database
     public function showSoldepa()
     {
         $userId = $_SESSION["userId"];
-        $stmt = $this->connection->prepare("SELECT balance , id FROM accounts WHERE user_id = ? && account_type='epargne'");
+        $stmt = $this->connection->prepare("SELECT balance ,acc_status, id FROM accounts WHERE user_id = ? && account_type='epargne'");
         $stmt->execute([$userId]);
         $clientSold = $stmt->fetch(PDO::FETCH_ASSOC);
         return $clientSold;
@@ -74,7 +74,7 @@ class Client extends Database
             $stmt = $this->connection->prepare("SELECT balance FROM accounts WHERE id = ? ");
             $stmt->execute([$transactionInfo["account_id"]]);
             $currentBalance = $stmt->fetchColumn();
-            
+
 
             // Check if sufficient balance
             if ((int)$currentBalance <  $transactionInfo["amount"]) {
@@ -82,25 +82,24 @@ class Client extends Database
             }
 
             // Update account balance
-            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance - :amount,  updated_at = NOW()   WHERE id = :accountId && acc_status='active'" );
+            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance - :amount,  updated_at = NOW()   WHERE id = :accountId && acc_status='active' && account_type='courant'");
 
             $stmt->execute([
                 ':amount' => $transactionInfo["amount"],
                 ':accountId' => $transactionInfo["account_id"]
             ]);
-            if(!$stmt){
+            if (!$stmt) {
                 return false;
             }
-        $stmt = $this->connection->prepare("INSERT INTO transactions (account_id,amount,transaction_type)  VALUES (?,?,?)");
-        $stmt->execute([$transactionInfo["account_id"], $transactionInfo["amount"], "retrait"]);
+            $stmt = $this->connection->prepare("INSERT INTO transactions (account_id,amount,transaction_type)  VALUES (?,?,?)");
+            $stmt->execute([$transactionInfo["account_id"], $transactionInfo["amount"], "retrait"]);
 
-          $this->connection->commit();
-          return true;
-
-      } catch (Exception $e) {
-          $this->connection->rollBack();
-          throw $e;
-      }
+            $this->connection->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
     }
     public function deposerArgent($transactionInfo)
     {
@@ -112,31 +111,31 @@ class Client extends Database
             $stmt = $this->connection->prepare("SELECT balance FROM accounts WHERE id = ? ");
             $stmt->execute([$transactionInfo["account_id"]]);
             $currentBalance = $stmt->fetchColumn();
-            
 
-            if ($transactionInfo['amount']<0.01 ) {
+
+            if ($transactionInfo['amount'] < 0.01) {
                 return false;
             }
 
             // Update account balance
-            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance + :amount,  updated_at = NOW()   WHERE id = :accountId && acc_status='active'" );
+            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance + :amount,  updated_at = NOW()   WHERE id = :accountId && acc_status='active'");
 
             $stmt->execute([
                 ':amount' => $transactionInfo["amount"],
                 ':accountId' => $transactionInfo["account_id"]
             ]);
-            if(!$stmt){
+            if (!$stmt) {
                 return false;
             }
             $stmt = $this->connection->prepare("INSERT INTO transactions (account_id,amount,transaction_type)  VALUES (?,?,?)");
             $stmt->execute([$transactionInfo["account_id"], $transactionInfo["amount"], "depot"]);
             $this->connection->commit();
             return true;
-  
         } catch (Exception $e) {
             $this->connection->rollBack();
             throw $e;
-        }    }
+        }
+    }
     public function transfererArgent($transactionInfo)
     {
         try {
@@ -145,30 +144,43 @@ class Client extends Database
 
             // Get current balance
             $stmt = $this->connection->prepare("SELECT balance FROM accounts WHERE id = ? ");
-            $stmt->execute([$transactionInfo["account_id"]]);
+            $stmt->execute([$transactionInfo["account_id_source"]]);
             $currentBalance = $stmt->fetchColumn();
-            
+            if ($currentBalance >= $transactionInfo["amount"]) {
 
+                // Update account balance
+                $stmt1 = $this->connection->prepare("UPDATE accounts  SET balance = balance + :amount,  updated_at = NOW()   WHERE id = :account_id_cible AND acc_status='active'");
+                $stmt2 = $this->connection->prepare("UPDATE accounts  SET balance = balance - :amount,  updated_at = NOW()   WHERE id = :account_id_source AND acc_status='active'");
+
+                $stmt1->execute([
+                    ':amount' => $transactionInfo["amount"],
+                    ':account_id_cible' => $transactionInfo["account_id_cible"],
+
+                ]);
+
+                $stmt2->execute([
+                    ':amount' => $transactionInfo["amount"],
+                    ':account_id_source' => $transactionInfo["account_id_source"],
+
+                ]);
+
+                $stmt = $this->connection->prepare("INSERT INTO transactions (account_id,amount,transaction_type,beneficiary_account_id)  VALUES (?,?,?,?)");
+                $stmt->execute([$transactionInfo["account_id_source"], $transactionInfo["amount"], "transfert", $transactionInfo["account_id_cible"]]);
+
+                $this->connection->commit();
+            } 
           
-
-            // Update account balance
-            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance + :amount,  updated_at = NOW()   WHERE id = :accountId && acc_status='active'" );
-            $stmt = $this->connection->prepare("UPDATE accounts  SET balance = balance - :amount,  updated_at = NOW()   WHERE id = : && acc_status='active'" );
-
-            $stmt->execute([
-                ':amount' => $transactionInfo["amount"],
-                ':accountId' => $transactionInfo["account_id"]
-            ]);
-            if(!$stmt){
-                return false;
-            }
-            $stmt = $this->connection->prepare("INSERT INTO transactions (account_id,amount,transaction_type)  VALUES (?,?,?)");
-            $stmt->execute([$transactionInfo["account_id"], $transactionInfo["amount"], "transfert"]);
-            $this->connection->commit();
-            return true;
-  
         } catch (Exception $e) {
+            error_log('erreur' . $e->getMessage());
             $this->connection->rollBack();
             throw $e;
-        }      }
+        }
+    }
+    public function history(){
+        $userId = $_SESSION["userId"];
+        $stmt = $this->connection->prepare("SELECT * FROM transactions inner join accounts on transactions.account_id=accounts.id WHERE accounts.user_id=?");
+        $stmt->execute([$userId]);
+        $alltransactions = $stmt->fetchAll();
+        return $alltransactions;
+    }
 }

@@ -4,9 +4,6 @@
  $user=new Client();
  $userSold=$user->showSold();
  $userSoldepa=$user->showSoldepa();
-
-//  var_dump($userSold);
-//  die();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,15 +30,15 @@
                     <i data-lucide="credit-card"></i>
                     <span>Mon comptes</span>
                 </a>
-                <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <!-- <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
                     <span>Virements</span>
-                </a>
+                </a> -->
                 <!-- <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="users"></i>
                     <span>Bénéficiaires</span>
                 </a> -->
-                <a href="historique.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="historique.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="history"></i>
                     <span>Historique</span>
                 </a>
@@ -63,28 +60,28 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h3 class="text-xl font-semibold text-gray-800">Compte Courant</h3>
-                            <p class="text-sm text-gray-500">N° FR76 1234 5678 9012</p>
+                            <p class="text-sm text-gray-500"><?=$userSold['id']?></p>
                         </div>
                         <div class="text-right">
                             <p class="text-2xl font-bold text-gray-900"><?=$userSold['balance']?></p>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                Actif
+                            <?=$userSold['acc_status']?>
                             </span>
                         </div>
                     </div>
                     
                     <div class="mt-6 grid grid-cols-2 gap-4">
-                        <button class="flex items-center justify-center p-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">
+                        <!-- <button class="flex items-center justify-center p-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
                             Alimenter
                         </button>
                         <button class="flex items-center justify-center p-3 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50">
                             <i data-lucide="download" class="w-5 h-5 mr-2"></i>
                             Relevé
-                        </button>
+                        </button> -->
                     </div>
 
-                    <div class="mt-6">
+                    <!-- <div class="mt-6">
                         <h4 class="font-medium text-gray-700">Détails du compte</h4>
                         <dl class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                             <div>
@@ -104,7 +101,7 @@
                                 <dd class="mt-1 text-sm text-gray-900">2€ / mois</dd>
                             </div>
                         </dl>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <?php endif ?>
@@ -117,30 +114,30 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h3 class="text-xl font-semibold text-gray-800">Compte Épargne</h3>
-                            <p class="text-sm text-gray-500">N° FR76 9876 5432 1098</p>
+                            <p class="text-sm text-gray-500"><?=$userSoldepa['id']?></p>
                         </div>
                         <div class="text-right">
                             <p class="text-2xl font-bold text-gray-900"><?=$userSoldepa['balance']?></p>
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                Actif
+                            <?=$userSold['acc_status']?>
                             </span>
                         </div>
                     </div>
                     
-                    <div class="mt-6 grid grid-cols-2 gap-4">
+                    <!-- <div class="mt-6 grid grid-cols-2 gap-4">
                         <button onclick="toggleModal('epargne')" class="flex items-center justify-center p-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
                             Alimenter
                         </button>
                         
                         <!-- Dans le Compte Épargne -->
-                        <button onclick="toggleModal('epargne')" class="flex items-center justify-center p-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
-                            Alimenter
-                        </button>
-                    </div>
+                        <!-- <button onclick="toggleModal('epargne')" class="flex items-center justify-center p-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50"> -->
+                            <!-- <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> -->
+                            <!-- Alimenter -->
+                        <!-- </button> -->
+                    <!-- </div> --> 
 
-                    <div class="mt-6">
+                    <!-- <div class="mt-6">
                         <h4 class="font-medium text-gray-700">Détails du compte</h4>
                         <dl class="mt-4 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                             <div>
@@ -160,7 +157,7 @@
                                 <dd class="mt-1 text-sm text-gray-900">Gratuit</dd>
                             </div>
                         </dl>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <?php endif ?>
@@ -171,25 +168,25 @@
         <div class="relative top-20 mx-auto p-5 w-full max-w-md">
             <div class="bg-white rounded-lg shadow-xl">
                 <!-- Modal header -->
-                <div class="flex justify-between items-center p-6 border-b">
+                <!-- <div class="flex justify-between items-center p-6 border-b">
                     <h3 class="text-lg font-semibold text-gray-900">Alimenter mon compte</h3>
                     <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-500">
                         <i data-lucide="x" class="w-6 h-6"></i>
                     </button>
-                </div>
+                </div> -->
 
                 <!-- Modal body -->
                 <div class="p-6">
                     <form id="alimenterForm" class="space-y-6" method="post">
                         <!-- Sélection du compte -->
-                        <div>
+                        <!-- <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Compte à alimenter *</label>
                             <select required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Sélectionnez un compte</option>
                                 <option value="courant">Compte Courant - FR76 1234 5678 9012 (2,450.50 €)</option>
                                 <option value="epargne">Compte Épargne - FR76 9876 5432 1098 (15,750.20 €)</option>
                             </select>
-                        </div>
+                        </div> -->
 
                         <!-- Montant -->
                         <div>
@@ -266,7 +263,7 @@
                 </div>
 
                 <!-- Modal footer -->
-                <div class="flex justify-end space-x-3 p-6 border-t bg-gray-50">
+                <!-- <div class="flex justify-end space-x-3 p-6 border-t bg-gray-50">
                     <button 
                         onclick="toggleModal()" 
                         class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -279,7 +276,7 @@
                     >
                         Confirmer l'alimentation
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

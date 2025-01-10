@@ -33,15 +33,15 @@
                     <i data-lucide="credit-card"></i>
                     <span>Mes comptes</span>
                 </a>
-                <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <!-- <a href="virement.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="send"></i>
                     <span>Virements</span>
-                </a>
+                </a> -->
                 <!-- <a href="benificier.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="users"></i>
                     <span>Bénéficiaires</span>
                 </a> -->
-                <a href="historique.html" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
+                <a href="historique.php" class="flex items-center w-full p-4 space-x-3 text-gray-600 hover:bg-gray-50">
                     <i data-lucide="history"></i>
                     <span>Historique</span>
                 </a>
@@ -73,7 +73,7 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Compte Courant</h3>
                     <p class="text-3xl font-bold text-gray-900 mt-2"><?=$userSold['balance']?></p>
-                    <p class="text-sm text-gray-500 mt-1">N° FR76 1234 5678 9012</p>
+                    <p class="text-sm text-gray-500 mt-1"><?=$userSold['id']?></p>
                 </div>
                 <?php endif ?>
 
@@ -82,7 +82,7 @@
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-700">Compte Épargne</h3>
                     <p class="text-3xl font-bold text-gray-900 mt-2"><?=$userSoldepa['balance']?></p>
-                    <p class="text-sm text-gray-500 mt-1">N° FR76 9876 5432 1098</p>
+                    <p class="text-sm text-gray-500 mt-1"><?=$userSoldepa['id']?></p>
                 </div>
                 <?php endif ?>
             </div>
@@ -114,7 +114,7 @@
             </div>
 
             <!-- Recent Transactions -->
-            <div class="bg-white rounded-lg shadow mt-6">
+            <!-- <div class="bg-white rounded-lg shadow mt-6">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-700">Transactions récentes</h3>
                     <div class="mt-4 space-y-4">
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 <!-- Toggle Button for Mobile -->

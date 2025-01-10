@@ -26,7 +26,7 @@
         <label for="source-account" class="block text-gray-700 font-medium mb-2">Compte source</label>
         <select 
              id="source-account" 
-              name="source_account_id" 
+              name="account_id_source" 
             class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
 >
@@ -44,7 +44,7 @@
         <label for="target-account" class="block text-gray-700 font-medium mb-2">Compte cible</label>
         <select 
           id="account-type" 
-          name="account_id" 
+          name="account_id_cible" 
           class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           required
         >
