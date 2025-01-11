@@ -85,9 +85,9 @@
         <div class="flex justify-between items-center flex-col md:flex-row mb-8">
             <h2 class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
             <div class="flex items-center space-x-4 flex-col  md:flex-row py-3 md:py-0">
-                <button onclick="generateReport()" class="px-4 mb-4 md:mb-0 mx-auto py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                <a href="rapport.php"  class="px-4 mb-4 md:mb-0 mx-auto py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                     Generate Report
-                </button>
+                </a>
                 <button onclick="openNewAccountModal()" class="px-4 py-2 bg-blue-600  text-white rounded-lg hover:bg-blue-700">
                     New Account
                 </button>
@@ -98,21 +98,21 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Deposits</h3>
-                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">€<?=$totalDp?></p>
+                <p class="text-3xl font-bold text-green-600 mt-2" id="totalDeposits">$<?=$totalDp?></p>
                 <div class="mt-2 text-sm text-gray-600">
                     <span class="text-green-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Withdrawals</h3>
-                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">€<?=$totalWith?></p>
+                <p class="text-3xl font-bold text-red-600 mt-2" id="totalWithdrawals">$<?=$totalWith?></p>
                 <div class="mt-2 text-sm text-gray-600">
                     <span class="text-red-500">All accounts</span>
                 </div>
             </div>
             <div class="bg-white rounded-xl shadow-md p-6">
                 <h3 class="text-gray-500 text-sm font-medium">Total Balance</h3>
-                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">€<?=$totalBal?></p>
+                <p class="text-3xl font-bold text-blue-600 mt-2" id="totalBalance">$<?=$totalBal?></p>
                 <div class="mt-2 text-sm text-gray-600">
                     <span class="text-blue-500">All accounts</span>
                 </div>
