@@ -160,16 +160,26 @@
                 <div class="text-sm text-gray-900 "><?= $value["balance"] ?></div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-                <form method="GET" action="adminDash.php">
+            <form method="GET" action="adminDash.php">
                     <select 
                         name="changeStatus"  
                         class="border p-2 border-blue-500 rounded"
                         onchange="this.form.submit()"
                     >
                     <option value="Account Status">Account Status</option>
-                        
+                        <?php
+                        $account = $admin->showAccDrop($value["user_id"]);
+                        for ($i = 0; $i < count($account); $i++) { ?>
+                            <option 
+                                class="p-2" 
+                                value="<?=$account[$i]["acc_status"] . '|' .$account[$i]["id"] ?>"
+                            >
+                            <?=$account[$i]["account_type"] .': ' . $account[$i]["acc_status"]?>
+                            </option>
+                        <?php } ?>
                     </select>
                 </form>
+
 
             </td>
             <td class="px-6 py-6 whitespace-nowrap text-sm gap-3 flex font-medium">
